@@ -23,17 +23,17 @@ public class SendServiceImpl implements SendService{
 
     @Override
     public void sendMerch(MerchDTO merchDTO) {
-        String toMail=merchDTO.getEmail(), subject="You created a New Merch", body="Hello Sir"+merchDTO.getBrandName();
+        ClientDTO client=clientFeign.getClientById(merchDTO.getClientId());
+        String toMail=client.getEmail(), subject="You created a New Merch", body="Hello Sir"+merchDTO.getBrandName();
         emailService.sendEmail(toMail, subject, body);
-//        emailService.sendEmail("amanzholov000@gmail.com", subject, body);
     }
 
     @Override
     public void sendComment(CommentDTO commentDTO) {
-        String subject=commentDTO.getUserId()+" replied to your comment", body="Hello Sir"+commentDTO.getText();
-        emailService.sendEmail(commentDTO.getEmail(), subject, body);
-        //test
-//        emailService.sendEmail("amanzholov000@gmail.com", subject, body);
-
+        ClientDTO replyCommentOwner=clientFeign.getClientById(commentDTO.getReplyCommentOwnerId());
+        String  email=replyCommentOwner.getEmail(),
+                subject="You have a new Comment Reply",
+                body="User: "+commentDTO.getNewCommentOwnerId()+" replied to your comment: "+commentDTO.getText();
+        emailService.sendEmail(email, subject, body);
     }
 }

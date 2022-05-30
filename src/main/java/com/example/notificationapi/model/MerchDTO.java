@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class MerchDTO {
     private String brandName;
-    private String email;
+    private String clientId;
 }
